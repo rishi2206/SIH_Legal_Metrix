@@ -1,0 +1,170 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* ==================================================
+     LEGALMETRIX NATURAL TRUST COLOR SYSTEM - LIGHT THEME
+     ================================================== */
+  --color-background: #FAF9F5;
+  --color-surface: #FFFFFF;
+  --color-surface-secondary: #F4F1E9;
+  --color-surface-elevated: #FFFFFF;
+  --color-surface-subtle: #EEF3EF;
+
+  --color-primary: #426B5A;
+  --color-primary-hover: #345749;
+  --color-primary-text: #FFFFFF;
+
+  --color-secondary: #8FAF9A;
+  --color-secondary-hover: #7E9E89;
+  --color-secondary-light: #EEF3EF;
+
+  --color-accent: #D8C79B;
+  --color-accent-hover: #C9B88A;
+  --color-soft-sand: #E8E1D2;
+
+  --color-text-primary: #303530;
+  --color-text-secondary: #5C6B61;
+  --color-text-muted: #6B7B70;
+  --color-text-inverse: #FAF9F5;
+
+  --color-border: #E8E1D2;
+  --color-border-subtle: #EDE7DB;
+  --color-border-focus: #426B5A;
+
+  --color-status-compliant-bg: #EAF2ED;
+  --color-status-compliant-text: #2C493D;
+  --color-status-compliant-border: #8FAF9A;
+
+  --color-status-noncompliant-bg: #F6F0E4;
+  --color-status-noncompliant-text: #6B4E23;
+  --color-status-noncompliant-border: #D8C79B;
+
+  --color-status-review-bg: #F2EFE9;
+  --color-status-review-text: #4D534E;
+  --color-status-review-border: #D2CBC0;
+}
+
+.dark {
+  /* ==================================================
+     LEGALMETRIX NATURAL TRUST COLOR SYSTEM - DARK THEME
+     ================================================== */
+  --color-background: #1A1F1C;
+  --color-surface: #232B26;
+  --color-surface-secondary: #2B332E;
+  --color-surface-elevated: #2B332E;
+  --color-surface-subtle: #202622;
+
+  --color-primary: #6F9B84;
+  --color-primary-hover: #5D8671;
+  --color-primary-text: #12261B;
+
+  --color-secondary: #8FAF9A;
+  --color-secondary-hover: #7E9E89;
+  --color-secondary-light: #2B332E;
+
+  --color-accent: #C8B77F;
+  --color-accent-hover: #B8A66C;
+  --color-soft-sand: #3F4A43;
+
+  --color-text-primary: #F5F3EA;
+  --color-text-secondary: #D4D0C5;
+  --color-text-muted: #A9A69C;
+
+  --color-text-inverse: #1A1F1C;
+
+  --color-border: #3A4640;
+  --color-border-subtle: #2B332E;
+  --color-border-focus: #6F9B84;
+
+  --color-status-compliant-bg: #1E2E24;
+  --color-status-compliant-text: #BFE2CE;
+  --color-status-compliant-border: #4A6E59;
+
+  --color-status-noncompliant-bg: #332B1C;
+  --color-status-noncompliant-text: #E8D5B0;
+  --color-status-noncompliant-border: #8E7C4F;
+
+  --color-status-review-bg: #2A2F2C;
+  --color-status-review-text: #DCD7CC;
+  --color-status-review-border: #545D56;
+}
+
+@theme {
+  --color-background: var(--color-background);
+  --color-surface: var(--color-surface);
+  --color-surface-secondary: var(--color-surface-secondary);
+  --color-surface-elevated: var(--color-surface-elevated);
+  --color-surface-subtle: var(--color-surface-subtle);
+
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-primary-text: var(--color-primary-text);
+
+  --color-secondary: var(--color-secondary);
+  --color-secondary-hover: var(--color-secondary-hover);
+  --color-secondary-light: var(--color-secondary-light);
+
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-soft-sand: var(--color-soft-sand);
+
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+  --color-text-inverse: var(--color-text-inverse);
+
+  --color-border: var(--color-border);
+  --color-border-subtle: var(--color-border-subtle);
+
+  --color-status-compliant-bg: var(--color-status-compliant-bg);
+  --color-status-compliant-text: var(--color-status-compliant-text);
+  --color-status-compliant-border: var(--color-status-compliant-border);
+  --color-status-noncompliant-bg: var(--color-status-noncompliant-bg);
+  --color-status-noncompliant-text: var(--color-status-noncompliant-text);
+  --color-status-noncompliant-border: var(--color-status-noncompliant-border);
+  --color-status-review-bg: var(--color-status-review-bg);
+  --color-status-review-text: var(--color-status-review-text);
+  --color-status-review-border: var(--color-status-review-border);
+}
+
+/*
+  Fix: previously only <body> got the theme background color, so in dark
+  mode any area taller than the body's content (elastic/overscroll on
+  mobile, or a short page) showed the browser's default white canvas
+  through. Setting it on html as well, plus a color-scheme hint so native
+  form controls / scrollbars also switch to dark, removes that flash.
+*/
+html {
+  background-color: var(--color-background);
+  color-scheme: light;
+}
+html.dark {
+  color-scheme: dark;
+}
+
+@layer base {
+  html, body, #root {
+    min-height: 100%;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: var(--color-border);
+    border-radius: 9999px;
+  }
+}

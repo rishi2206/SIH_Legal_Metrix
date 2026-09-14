@@ -1,0 +1,32 @@
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# Node / React Native
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.metro-health-check*
+
+# Maven / Java
+**/target/
+**/.mvn/
+*.class
+
+# Python / FastAPI
+**/venv/
+**/__pycache__/
+*.pyc
+
+# Local Storage Uploads & Reports
+**/uploads/
+*.pdf
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
