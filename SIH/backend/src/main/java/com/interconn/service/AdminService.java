@@ -194,6 +194,37 @@ public class AdminService {
         );
     }
 
+    public void deleteSupervisor(UUID supervisorId, User admin) {
+        deleteManagedUser(supervisorId, admin, Role.SUPERVISOR);
+    }
+
+    public void deleteManufacturer(UUID manufacturerId, User admin) {
+        deleteManagedUser(manufacturerId, admin, Role.MANUFACTURER);
+    }
+
+    /**
+     * "Deleting" a supervisor/manufacturer disables their account rather than removing
+     * the row: their past inspections, evidence and reports must stay intact (and the
+     * `inspections.supervisor_id` foreign key is NOT NULL), so a hard delete would either
+     * fail or silently orphan real compliance history. Disabling immediately blocks login
+     * (see AuthService.login) and removes them from the active roster.
+     */
+    private void deleteManagedUser(UUID userId, User admin, Role expectedRole) {
+
+        User managedUser = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        if (managedUser.getRole() != expectedRole ||
+                managedUser.getAdmin() == null ||
+                !managedUser.getAdmin().getId().equals(admin.getId())) {
+
+            throw new RuntimeException("Account not found");
+        }
+
+        managedUser.setStatus(UserStatus.DISABLED);
+        userRepository.save(managedUser);
+    }
+
     public void activateSupervisor(ActivateSupervisorRequest request) {
 
         SupervisorInvite invite = inviteRepository

@@ -16,6 +16,7 @@ public class InspectionResponse {
     private InspectionStatus status;
     private ComplianceResult overallResult;
     private InspectionType inspectionType;
+    private Double complianceScore;
     private String location;
     private LocalDateTime createdAt;
 
@@ -29,6 +30,7 @@ public class InspectionResponse {
             InspectionStatus status,
             ComplianceResult overallResult,
             InspectionType inspectionType,
+            Double complianceScore,
             String location,
             LocalDateTime createdAt
     ) {
@@ -38,6 +40,7 @@ public class InspectionResponse {
         this.status = status;
         this.overallResult = overallResult;
         this.inspectionType = inspectionType;
+        this.complianceScore = complianceScore;
         this.location = location;
         this.createdAt = createdAt;
     }
@@ -64,6 +67,10 @@ public class InspectionResponse {
 
     public InspectionType getInspectionType() {
         return inspectionType;
+    }
+
+    public Double getComplianceScore() {
+        return complianceScore;
     }
 
     public String getLocation() {

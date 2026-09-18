@@ -67,9 +67,6 @@ export const api = {
       auth: false,
     }),
 
-  registerManufacturer: (data) =>
-    request('/api/auth/register/manufacturer', { method: 'POST', body: data, auth: false }),
-
   // ---- Dashboard ----
   getSupervisorDashboard: () => request('/api/dashboard/supervisor'),
   getAdminDashboard: () => request('/api/dashboard/admin'),
@@ -156,9 +153,11 @@ export const api = {
   createSupervisor: (data) => request('/api/admin/supervisors', { method: 'POST', body: data }),
   getSupervisors: () => request('/api/admin/supervisors'),
   getSupervisor: (id) => request(`/api/admin/supervisors/${id}`),
+  deleteSupervisor: (id) => request(`/api/admin/supervisors/${id}`, { method: 'DELETE' }),
   createManufacturer: (data) => request('/api/admin/manufacturers', { method: 'POST', body: data }),
   getManufacturers: () => request('/api/admin/manufacturers'),
   getManufacturer: (id) => request(`/api/admin/manufacturers/${id}`),
+  deleteManufacturer: (id) => request(`/api/admin/manufacturers/${id}`, { method: 'DELETE' }),
 };
 
 export { API_BASE };

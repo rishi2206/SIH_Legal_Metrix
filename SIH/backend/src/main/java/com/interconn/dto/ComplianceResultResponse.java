@@ -12,6 +12,7 @@ public class ComplianceResultResponse {
     private ComplianceResult overallResult;
     private InspectionStatus inspectionStatus;
     private int violationCount;
+    private Double complianceScore;
     private List<ViolationResponse> violations;
 
     public ComplianceResultResponse(
@@ -19,12 +20,14 @@ public class ComplianceResultResponse {
             ComplianceResult overallResult,
             InspectionStatus inspectionStatus,
             int violationCount,
+            Double complianceScore,
             List<ViolationResponse> violations) {
 
         this.inspectionId = inspectionId;
         this.overallResult = overallResult;
         this.inspectionStatus = inspectionStatus;
         this.violationCount = violationCount;
+        this.complianceScore = complianceScore;
         this.violations = violations;
     }
 
@@ -42,6 +45,10 @@ public class ComplianceResultResponse {
 
     public int getViolationCount() {
         return violationCount;
+    }
+
+    public Double getComplianceScore() {
+        return complianceScore;
     }
 
     public List<ViolationResponse> getViolations() {

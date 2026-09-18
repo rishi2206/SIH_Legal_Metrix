@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, ChevronRight, Copy, Check, KeySquare } from 'lucide-react';
+import { Plus, ChevronRight, Copy, Check, KeySquare, Trash2 } from 'lucide-react';
 import { api } from '../../api/client.js';
 import { Card, Button, Field, Input, ErrorBanner, Badge, EmptyState } from '../../components/ui.jsx';
 import { userStatusTone, humanizeEnum } from '../../utils/format.js';
@@ -14,6 +14,7 @@ export default function SupervisorsPage() {
   const [creating, setCreating] = useState(false);
   const [newInvite, setNewInvite] = useState(null);
   const [copiedField, setCopiedField] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
 
   const load = () => {
     setLoading(true);
@@ -52,6 +53,24 @@ export default function SupervisorsPage() {
       setCopiedField(field);
       setTimeout(() => setCopiedField(null), 1500);
     });
+  };
+
+  const handleDelete = async (supervisor) => {
+    if (!window.confirm(`Remove ${supervisor.name}'s access? They will no longer be able to log in.`)) {
+      return;
+    }
+    setError(null);
+    setDeletingId(supervisor.id);
+    try {
+      await api.deleteSupervisor(supervisor.id);
+      setSupervisors((prev) =>
+        prev.map((s) => (s.id === supervisor.id ? { ...s, status: 'DISABLED' } : s))
+      );
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setDeletingId(null);
+    }
   };
 
   return (
@@ -148,20 +167,26 @@ export default function SupervisorsPage() {
         ) : (
           <ul className="divide-y divide-border">
             {supervisors.map((s) => (
-              <li key={s.id}>
-                <Link
-                  to={`/supervisors/${s.id}`}
-                  className="flex items-center justify-between px-5 py-4 hover:bg-surface-secondary transition-colors"
-                >
-                  <div>
+              <li key={s.id} className="flex items-center justify-between px-5 py-4 hover:bg-surface-secondary transition-colors">
+                <Link to={`/supervisors/${s.id}`} className="flex-1 flex items-center justify-between min-w-0">
+                  <div className="min-w-0">
                     <p className="font-medium text-sm">{s.name}</p>
                     <p className="text-xs text-text-muted mt-0.5">{s.email}</p>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 mr-3">
                     <Badge tone={userStatusTone(s.status)}>{humanizeEnum(s.status)}</Badge>
                     <ChevronRight size={16} className="text-text-muted" />
                   </div>
                 </Link>
+                <button
+                  type="button"
+                  title="Remove access"
+                  disabled={s.status === 'DISABLED' || deletingId === s.id}
+                  onClick={() => handleDelete(s)}
+                  className="p-2 rounded-lg text-text-muted hover:text-status-noncompliant-text hover:bg-status-noncompliant-bg transition-colors disabled:opacity-40 disabled:pointer-events-none"
+                >
+                  <Trash2 size={16} />
+                </button>
               </li>
             ))}
           </ul>

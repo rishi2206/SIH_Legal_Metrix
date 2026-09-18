@@ -81,6 +81,7 @@ public class InspectionService {
                 inspection.getStatus(),
                 inspection.getOverallResult(),
                 inspection.getInspectionType(),
+                inspection.getComplianceScore(),
                 inspection.getLocation(),
                 inspection.getCreatedAt()
         );

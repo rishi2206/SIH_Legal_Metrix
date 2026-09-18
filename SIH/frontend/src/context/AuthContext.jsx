@@ -24,7 +24,7 @@ export function AuthProvider({ children }) {
     setError(null);
     try {
       const response = await api.login(email, password);
-      // role from backend is ADMIN | SUPERVISOR
+      // role from backend is ADMIN | SUPERVISOR | MANUFACTURER
       const nextUser = {
         id: response.userId,
         name: response.name,

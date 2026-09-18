@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, ChevronRight, Copy, Check, KeySquare } from 'lucide-react';
+import { Plus, ChevronRight, Copy, Check, KeySquare, Trash2 } from 'lucide-react';
 import { api } from '../../api/client.js';
 import { Card, Button, Field, Input, ErrorBanner, Badge, EmptyState } from '../../components/ui.jsx';
 import { userStatusTone, humanizeEnum } from '../../utils/format.js';
@@ -14,6 +14,7 @@ export default function ManufacturersPage() {
   const [creating, setCreating] = useState(false);
   const [newInvite, setNewInvite] = useState(null);
   const [copiedField, setCopiedField] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
 
   const load = () => {
     setLoading(true);
@@ -52,6 +53,24 @@ export default function ManufacturersPage() {
       setCopiedField(field);
       setTimeout(() => setCopiedField(null), 1500);
     });
+  };
+
+  const handleDelete = async (manufacturer) => {
+    if (!window.confirm(`Remove ${manufacturer.name}'s access? They will no longer be able to log in.`)) {
+      return;
+    }
+    setError(null);
+    setDeletingId(manufacturer.id);
+    try {
+      await api.deleteManufacturer(manufacturer.id);
+      setManufacturers((prev) =>
+        prev.map((m) => (m.id === manufacturer.id ? { ...m, status: 'DISABLED' } : m))
+      );
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setDeletingId(null);
+    }
   };
 
   return (

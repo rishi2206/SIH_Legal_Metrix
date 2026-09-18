@@ -615,6 +615,29 @@ export default function InspectionDetail() {
           </p>
         ) : (
           <div className="space-y-4">
+            {typeof result.complianceScore === 'number' && (
+              <div className="flex items-center gap-4 rounded-lg border border-border px-4 py-3.5">
+                <div
+                  className="text-2xl font-semibold tabular-nums"
+                  style={{
+                    color:
+                      result.complianceScore >= 80
+                        ? 'var(--color-status-compliant-text)'
+                        : result.complianceScore >= 50
+                          ? 'var(--color-status-review-text)'
+                          : 'var(--color-status-noncompliant-text)',
+                  }}
+                >
+                  {result.complianceScore}%
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Compliance score</p>
+                  <p className="text-xs text-text-muted mt-0.5">
+                    Share of Legal Metrology rule checks this product passed
+                  </p>
+                </div>
+              </div>
+            )}
             <div className="flex items-center gap-3">
               <Badge tone={complianceResultTone(result.overallResult)}>
                 {humanizeEnum(result.overallResult)}

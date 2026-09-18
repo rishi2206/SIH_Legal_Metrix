@@ -2,9 +2,7 @@ package com.interconn.service;
 
 import com.interconn.dto.LoginRequest;
 import com.interconn.dto.LoginResponse;
-import com.interconn.dto.RegisterManufacturerRequest;
 import com.interconn.entity.AuditAction;
-import com.interconn.entity.Role;
 import com.interconn.entity.User;
 import com.interconn.entity.UserStatus;
 import com.interconn.repository.UserRepository;
@@ -66,47 +64,6 @@ public class AuthService {
                 user.getName(),
                 user.getEmail(),
                 user.getRole()
-        );
-    }
-
-    /**
-     * Self-service sign-up for manufacturing companies. Unlike supervisors (who are
-     * invited by an admin and activate via a token), a manufacturer can register
-     * directly and is active immediately so they can start running pre-dispatch
-     * checks right away.
-     */
-    public LoginResponse registerManufacturer(RegisterManufacturerRequest request) {
-
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("An account with this email already exists");
-        }
-
-        User user = new User();
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-        user.setPhone(request.getPhone());
-        user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
-        user.setRole(Role.MANUFACTURER);
-        user.setStatus(UserStatus.ACTIVE);
-
-        User savedUser = userRepository.save(user);
-
-        auditLogService.logAction(
-                savedUser.getEmail(),
-                savedUser.getRole(),
-                null,
-                AuditAction.USER_REGISTERED,
-                "Manufacturer account registered: " + savedUser.getName()
-        );
-
-        String token = jwtService.generateToken(savedUser);
-
-        return new LoginResponse(
-                token,
-                savedUser.getId(),
-                savedUser.getName(),
-                savedUser.getEmail(),
-                savedUser.getRole()
         );
     }
 }

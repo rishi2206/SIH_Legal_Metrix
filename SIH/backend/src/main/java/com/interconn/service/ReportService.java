@@ -101,6 +101,6 @@ public class ReportService {
     }
 
     public byte[] downloadReportBytes(Report report) {
-        return supabaseStorageService.downloadReport(report.getReportUrl());
+        return supabaseStorageService.downloadFile(report.getReportUrl());
     }
 }

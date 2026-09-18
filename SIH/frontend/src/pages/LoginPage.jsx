@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useLocation, useSearchParams, Link } from 'react-router-dom';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { ShieldCheck, Sun, Moon, UserCog, HardHat, Factory, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useTheme } from '../context/ThemeContext.jsx';
@@ -68,12 +68,6 @@ function RoleChoice({ onChoose }) {
           );
         })}
       </div>
-      <p className="text-sm text-text-muted text-center mt-5">
-        Manufacturing company? {' '}
-        <Link to="/register" className="text-primary font-medium hover:underline">
-          Register your company
-        </Link>
-      </p>
     </div>
   );
 }

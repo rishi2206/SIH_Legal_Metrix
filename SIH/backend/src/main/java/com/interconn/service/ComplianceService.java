@@ -76,6 +76,15 @@ public class ComplianceService {
             inspection.setOverallResult(ComplianceResult.COMPLIANT);
         }
 
+        // Compliance score = % of (product x rule) checks that passed.
+        // Each rule can fire at most one violation per product, so the total
+        // number of checks performed is simply products x rules.
+        int totalChecks = products.size() * complianceRules.size();
+        double score = totalChecks == 0
+                ? 100.0
+                : Math.max(0.0, Math.round((totalChecks - violations.size()) * 1000.0 / totalChecks) / 10.0);
+        inspection.setComplianceScore(score);
+
         inspection.setStatus(InspectionStatus.COMPLETED);
         inspectionRepository.save(inspection);
 
@@ -96,6 +105,7 @@ public class ComplianceService {
                 inspection.getOverallResult(),
                 inspection.getStatus(),
                 violations.size(),
+                inspection.getComplianceScore(),
                 responses
         );
     }
@@ -130,6 +140,7 @@ public class ComplianceService {
                 inspection.getOverallResult(),
                 inspection.getStatus(),
                 violations.size(),
+                inspection.getComplianceScore(),
                 violations
         );
     }

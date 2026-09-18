@@ -112,4 +112,34 @@ public class AdminController {
                 adminService.getManufacturer(manufacturerId, admin)
         );
     }
+
+    @DeleteMapping("/supervisors/{supervisorId}")
+    public ResponseEntity<Void> deleteSupervisor(
+            @PathVariable UUID supervisorId,
+            Authentication authentication) {
+
+        UUID adminId = UUID.fromString(authentication.getName());
+
+        User admin = userRepository.findById(adminId)
+                .orElseThrow(() -> new RuntimeException("Admin not found"));
+
+        adminService.deleteSupervisor(supervisorId, admin);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/manufacturers/{manufacturerId}")
+    public ResponseEntity<Void> deleteManufacturer(
+            @PathVariable UUID manufacturerId,
+            Authentication authentication) {
+
+        UUID adminId = UUID.fromString(authentication.getName());
+
+        User admin = userRepository.findById(adminId)
+                .orElseThrow(() -> new RuntimeException("Admin not found"));
+
+        adminService.deleteManufacturer(manufacturerId, admin);
+
+        return ResponseEntity.noContent().build();
+    }
 }

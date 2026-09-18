@@ -33,6 +33,9 @@ public class Inspection {
     @Column(name = "inspection_type")
     private InspectionType inspectionType;
 
+    @Column(name = "compliance_score")
+    private Double complianceScore;
+
     private String location;
 
     @Column(name = "created_at", nullable = false)
@@ -111,6 +114,14 @@ public class Inspection {
 
     public void setInspectionType(InspectionType inspectionType) {
         this.inspectionType = inspectionType;
+    }
+
+    public Double getComplianceScore() {
+        return complianceScore;
+    }
+
+    public void setComplianceScore(Double complianceScore) {
+        this.complianceScore = complianceScore;
     }
 
     public String getLocation() {

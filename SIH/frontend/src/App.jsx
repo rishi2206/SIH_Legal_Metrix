@@ -5,7 +5,6 @@ import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 import LoginPage from './pages/LoginPage.jsx';
 import ActivateSupervisorPage from './pages/ActivateSupervisorPage.jsx';
-import RegisterManufacturerPage from './pages/RegisterManufacturerPage.jsx';
 import ProfilePage from './pages/ProfilePage.jsx';
 import HistoryPage from './pages/HistoryPage.jsx';
 
@@ -30,7 +29,6 @@ function AppRoutes() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/activate" element={<ActivateSupervisorPage />} />
-      <Route path="/register" element={<RegisterManufacturerPage />} />
 
       <Route
         path="/"

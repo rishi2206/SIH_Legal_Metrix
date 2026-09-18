@@ -60,20 +60,21 @@ public class SupabaseStorageService {
     }
 
     /**
-     * Reads back the bytes for a previously stored report, regardless of whether it
-     * ended up on Supabase Storage (a real https URL) or the local filesystem fallback
-     * (a relative path like "uploads/reports/..."). This lets the API always serve a
-     * downloadable PDF even when Supabase isn't configured for this environment.
+     * Generic file fetch: reads back bytes for anything previously stored via
+     * uploadToBucket (evidence images or reports), regardless of whether it ended
+     * up on Supabase Storage (a real https URL) or the local filesystem fallback
+     * (a relative path like "uploads/evidence-images/..."). This lets the API
+     * always serve/embed files even when Supabase isn't configured.
      */
-    public byte[] downloadReport(String reportUrl) {
-        if (reportUrl == null || reportUrl.isBlank()) {
-            throw new RuntimeException("Report has no stored file to download");
+    public byte[] downloadFile(String fileUrl) {
+        if (fileUrl == null || fileUrl.isBlank()) {
+            throw new RuntimeException("No stored file to download");
         }
 
-        if (reportUrl.startsWith("http://") || reportUrl.startsWith("https://")) {
+        if (fileUrl.startsWith("http://") || fileUrl.startsWith("https://")) {
             try {
                 HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(reportUrl))
+                        .uri(URI.create(fileUrl))
                         .header("Authorization", "Bearer " + supabaseKey)
                         .header("apikey", supabaseKey)
                         .GET()
@@ -82,21 +83,30 @@ public class SupabaseStorageService {
                 HttpResponse<byte[]> response = httpClient.send(request, HttpResponse.BodyHandlers.ofByteArray());
 
                 if (response.statusCode() != 200) {
-                    throw new RuntimeException("Failed to fetch report from storage: HTTP " + response.statusCode());
+                    throw new RuntimeException("Failed to fetch file from storage: HTTP " + response.statusCode());
                 }
 
                 return response.body();
             } catch (IOException | InterruptedException e) {
                 Thread.currentThread().interrupt();
-                throw new RuntimeException("Failed to fetch report from storage", e);
+                throw new RuntimeException("Failed to fetch file from storage", e);
             }
         }
 
         try {
-            return Files.readAllBytes(Paths.get(reportUrl));
+            return Files.readAllBytes(Paths.get(fileUrl));
         } catch (IOException e) {
-            throw new RuntimeException("Report file not found on server: " + reportUrl, e);
+            throw new RuntimeException("File not found on server: " + fileUrl, e);
         }
+    }
+
+    /**
+     * @deprecated kept as a thin alias so existing report-download call sites keep working;
+     * use {@link #downloadFile(String)} directly for new code (evidence images included).
+     */
+    @Deprecated
+    public byte[] downloadReport(String reportUrl) {
+        return downloadFile(reportUrl);
     }
 
     private String uploadToBucket(String bucket, String objectPath, byte[] data, String contentType) {
